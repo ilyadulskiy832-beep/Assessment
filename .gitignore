@@ -1,0 +1,33 @@
+# Dependencies
+node_modules/
+
+# Environment
+.env
+.env.local
+*.env
+!.env.example
+
+# Build / artifacts
+dist/
+build/
+.next/
+cache/
+artifacts/
+typechain-types/
+coverage/
+coverage.json
+
+# Hardhat
+task-1-smart-contract/cache/
+task-1-smart-contract/artifacts/
+
+# Logs and OS
+*.log
+.DS_Store
+Thumbs.db
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
