@@ -1,6 +1,7 @@
 const express = require("express");
+const { ethers } = require("ethers");
 const router = express.Router();
-
+const COUNTER_ABI = require("../config/counterAbi");
 // TODO: Use ethers to read getCount() from Counter contract.
 // Use env: RPC_URL, COUNTER_CONTRACT_ADDRESS.
 // Counter ABI fragment is in ../config/counterAbi.js
@@ -11,12 +12,20 @@ const router = express.Router();
  * Response: { "count": number }
  * On failure: 502 with error message.
  */
+
 router.get("/count", async (req, res, next) => {
   try {
     // TODO: Create ethers provider, attach to Counter contract, call getCount().
-    // Return res.json({ count: value }).
-    // On error (e.g. wrong RPC or address), res.status(502).json({ error: "..." }).
-    res.json({ count: 0 });
+    this.provider = new ethers.JsonRpcProvider(process.env.RPC_URL);
+
+    this.contract = new ethers.Contract(
+      process.env.COUNTER_CONTRACT_ADDRESS,
+      COUNTER_ABI,
+      this.provider
+    );
+    const count = await this.contract.getCount();
+    console.log('Count :', count);
+    res.json({ count: Number(count) });
   } catch (err) {
     next(err);
   }

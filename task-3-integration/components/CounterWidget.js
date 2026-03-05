@@ -50,6 +50,12 @@ export default function CounterWidget() {
         setError("Set NEXT_PUBLIC_COUNTER_CONTRACT_ADDRESS in .env.local");
         return;
       }
+      
+      const network = await provider.getNetwork();
+
+      if (network.chainId !== 31337n) {
+        alert("Switch MetaMask to Hardhat Local network");
+      }
       const contract = new ethers.Contract(
         CONFIG.COUNTER_CONTRACT_ADDRESS,
         COUNTER_ABI,

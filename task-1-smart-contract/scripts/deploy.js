@@ -1,12 +1,19 @@
-const hre = require("hardhat");
+const { ethers } = require("hardhat");
 
 async function main() {
-  // TODO: Deploy Counter and log the contract address
+  const Counter = await ethers.getContractFactory("Counter");
+
+  console.log("Deploying Counter...");
+
+  const counter = await Counter.deploy();
+  await counter.waitForDeployment();
+
+  const address = await counter.getAddress();
+
+  console.log("Counter deployed to:", address);
 }
 
-main()
-  .then(() => process.exit(0))
-  .catch((error) => {
-    console.error(error);
-    process.exit(1);
-  });
+main().catch((error) => {
+  console.error(error);
+  process.exitCode = 1;
+});

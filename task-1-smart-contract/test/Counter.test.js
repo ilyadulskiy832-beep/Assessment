@@ -2,8 +2,33 @@ const { expect } = require("chai");
 const { ethers } = require("hardhat");
 
 describe("Counter", function () {
-  // TODO: Deploy Counter in beforeEach/before, then add tests for:
-  // - increment updates count
-  // - decrement updates count
-  // - decrement does not go below zero (reverts or stays at 0)
+  let counter;
+
+  beforeEach(async function () {
+    const Counter = await ethers.getContractFactory("Counter");
+    counter = await Counter.deploy();
+    await counter.waitForDeployment();
+  });
+
+  it("should start at 0", async function () {
+    expect(await counter.getCount()).to.equal(0);
+  });
+
+  it("should increment correctly", async function () {
+    await counter.increment();
+    expect(await counter.getCount()).to.equal(1);
+  });
+
+  it("should decrement correctly", async function () {
+    await counter.increment();
+    await counter.decrement();
+
+    expect(await counter.getCount()).to.equal(0);
+  });
+
+  it("should not allow underflow", async function () {
+    await expect(counter.decrement()).to.be.revertedWith(
+      "Cannot decrement below zero"
+    );
+  });
 });
